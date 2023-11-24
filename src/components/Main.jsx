@@ -1,11 +1,114 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { ethers, networks, getDefaultProvider } from 'ethers';
+import { decrypt } from '../utils/crypto_func';
+import { goerli_test, polygon_mumbai, mainnet } from '../models/Chain';
+import { toFixedIfNecessary, shortenAddress } from '../utils/AccountUtils';
 
-const Main = ({ show, handleSelectedPage }) => {
+const Main = ({ show, handleSelectedPage, selectedNetwork }) => {
+  const [destinationAddress, setDestinationAddress] = useState('');
+  const [amount, setAmount] = useState(0);
+  const [balance, setBalance] = useState(0);
+  const [nameSym, setNameSym] = useState('');
+
+  const [networkResponse, setNetworkResponse] = useState({
+    status: null,
+    message: '',
+  });
+  const encIv = process.env.REACT_APP_ENCIV;
+  const encryptKey = process.env.REACT_APP_ENCRYPTION_KEY;
+
+  const handleDestinationAddressChange = (event) => {
+    setDestinationAddress(event.target.value);
+  };
+
+  const handleAmountChange = (event) => {
+    setAmount(Number.parseFloat(event.target.value));
+  };
+
+  // async function transfer() {
+  //   setNetworkResponse({
+  //     status: 'pending',
+  //     message: '',
+  //   });
+
+  //   try {
+  //     const { receipt } = await sendToken(amount, account.address, destinationAddress, account.privateKey);
+
+  //     if (receipt.status === 1) {
+  //       // Set the network response status to "complete" and the message to the transaction hash
+  //       setNetworkResponse({
+  //         status: 'complete',
+  //         message: (
+  //           <p>
+  //             Transfer complete!{' '}
+  //             <a href={`${goerli.blockExplorerUrl}/tx/${receipt.transactionHash}`} target='_blank' rel='noreferrer'>
+  //               View transaction
+  //             </a>
+  //           </p>
+  //         ),
+  //       });
+  //       return receipt;
+  //     } else {
+  //       // Transaction failed
+  //       console.log(`Failed to send ${receipt}`);
+  //       // Set the network response status to "error" and the message to the receipt
+  //       setNetworkResponse({
+  //         status: 'error',
+  //         message: JSON.stringify(receipt),
+  //       });
+  //       return { receipt };
+  //     }
+  //   } catch (error) {
+  //     // An error occurred while sending the transaction
+  //     console.error({ error });
+  //     // Set the network response status to "error" and the message to the error
+  //     setNetworkResponse({
+  //       status: 'error',
+  //       message: error.reason || JSON.stringify(error),
+  //     });
+  //   }
+  // }
+
+  useEffect(() => {
+    const miwallet = JSON.parse(localStorage.getItem('MIWALLET'));
+    if (miwallet && miwallet.k) {
+      let decode = decrypt(miwallet.k, encIv, encryptKey);
+      decode = JSON.parse(decode);
+      const account1 = decode.account[0];
+      const mynetworks = [goerli_test, mainnet, polygon_mumbai];
+      const fetchData = async () => {
+        const provider = new ethers.providers.JsonRpcProvider(mynetworks[0].rpcUrl);
+        const network = await provider.getNetwork();
+        setNameSym(network.name);
+        let accountBalance = await provider.getBalance(account1.address);
+        setBalance(String(toFixedIfNecessary(ethers.utils.formatEther(accountBalance))));
+        setDestinationAddress(account1.address);
+      };
+      fetchData();
+    } else {
+      handleSelectedPage('login');
+    }
+  }, [show]);
+
+  useEffect(() => {
+    console.log(selectedNetwork);
+    if (selectedNetwork && destinationAddress) {
+      const fetchData = async () => {
+        const provider = new ethers.providers.JsonRpcProvider(selectedNetwork.rpcUrl);
+        const network = await provider.getNetwork();
+        setNameSym(network.name);
+        let accountBalance = await provider.getBalance(destinationAddress);
+        setBalance(String(toFixedIfNecessary(ethers.utils.formatEther(accountBalance))));
+      };
+      fetchData();
+    }
+  }, [selectedNetwork]);
+
   return (
     <div className={`home ${show ? 'show' : 'hide'}`} id='home'>
       <div className='home_header'>
         <div>
-          <p id='userAddress'>connecting...</p>
+          <p id='userAddress'>{shortenAddress(destinationAddress, 8)}</p>
         </div>
         <div>
           <p>Active</p>
@@ -13,7 +116,9 @@ const Main = ({ show, handleSelectedPage }) => {
       </div>
 
       <img src='./assets/theblockchaincoders.svg' className='home_header_img' alt='' />
-      <h1 id='accountBlance'>0.00 MATIC</h1>
+      <h1 id='accountBlance'>
+        {balance} {nameSym}ETH
+      </h1>
 
       <div className='home_features'>
         <div className='home_feature_item'>

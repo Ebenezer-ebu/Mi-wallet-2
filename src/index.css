@@ -53,7 +53,6 @@ body {
 
 /* NETWORK */
 .network {
-  display: none;
   position: absolute;
   background: #171717;
   width: 100%;
@@ -71,6 +70,11 @@ body {
   border: 1px solid rgb(0, 255, 200);
 }
 
+.network_list {
+  height: 200px;
+  overflow: scroll;
+}
+
 .network_item {
   padding: 0.5rem 4rem;
   font-size: 0.9rem;
@@ -78,6 +82,19 @@ body {
   grid-template-columns: 1fr 3fr;
   cursor: pointer;
   place-content: start;
+  overflow: hidden;
+}
+
+.account {
+  display: flex;
+  gap: 2rem;
+  padding: 0;
+  margin-top: 1rem;
+}
+
+.account .button3 {
+  margin: 0;
+  width: 50%;
 }
 
 /* HOME SCREEN */
@@ -290,7 +307,6 @@ textarea {
 /* LOADER */
 
 .center {
-  display: none;
   justify-content: center;
   align-items: center;
   margin: 0 auto;

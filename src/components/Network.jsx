@@ -1,35 +1,30 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { goerli_test, polygon_mumbai, mainnet } from '../models/Chain';
 
-const Network = () => {
+const Network = ({ show, setShowNetwork, setSelectedNetwork }) => {
+  const [myNetworks, setMyNetworks] = useState(null);
+  useEffect(() => {
+    const networks = [goerli_test, mainnet, polygon_mumbai];
+    setSelectedNetwork(networks[0]);
+    setMyNetworks(networks);
+  }, []);
   return (
-    <div id='network' className='network'>
+    <div id='network' className={`network ${show ? 'show' : 'hide'}`}>
       <div className='network_title'>
         <p>Networks</p>
       </div>
       <div id='network_item' className='network_list'>
-        <p className='network_item'>
-          <img src='./assets/SVG/lock.svg' alt='lock' />
-          <span>Ethereum Mainnet</span>
-        </p>
-        <p className='network_item'>
-          <img src='./assets/SVG/lock.svg' alt='lock' />
-          <span>Polygon Mainnet</span>
-        </p>
-        <p className='network_item'>
-          <img src='./assets/SVG/lock.svg' alt='lock' />
-          <span>Polygon Mumbai</span>
-        </p>
-        <p className='network_item'>
-          <img src='./assets/SVG/lock.svg' alt='lock' />
-          <span>Goerli test network</span>
-        </p>
-        <p className='network_item'>
-          <img src='./assets/SVG/lock.svg' alt='lock' />
-          <span>Sepolia test network</span>
-        </p>
+        {myNetworks?.map((network, i) => {
+          return (
+            <p className='network_item' key={i} onClick={() => setSelectedNetwork(network)}>
+              <img src='./assets/SVG/lock.svg' alt='lock' />
+              <span>{network.name}</span>
+            </p>
+          );
+        })}
       </div>
 
-      <button id='add_network' className='button3 addStyle'>
+      <button id='add_network' className='button3 addStyle' onClick={() => setShowNetwork(false)}>
         Add network
       </button>
     </div>

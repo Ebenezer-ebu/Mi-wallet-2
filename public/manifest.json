@@ -1,12 +1,14 @@
 {
-  "short_name": "Wallet",
   "name": "mi wallet",
   "description": "Transfer funds to any wallet",
   "version": "1.0",
   "manifest_version": 3,
   "action": {
-    "default_popup": "popup.html",
+    "default_popup": "index.html",
     "default_icon": "favicon.png"
+  },
+  "chrome_url_overrides": {
+    "newtab": "index.html"
   },
   "display": "standalone",
   "permissions": ["storage", "tabs", "bookmarks", "unlimitedStorage", "nativeMessaging"]
