@@ -58,6 +58,7 @@ body {
   width: 100%;
   right: 0;
   text-align: center;
+  z-index: 1;
 }
 
 .network .addStyle {
@@ -485,4 +486,40 @@ textarea {
 
 .show {
   display: block;
+}
+
+.address-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.address-box span {
+  color: #00ff75;
+  margin-left: 0.5rem;
+}
+
+.userAddress {
+  cursor: pointer;
+}
+
+.address-list {
+  display: flex;
+  flex-direction: column;
+  color: whitesmoke;
+  position: absolute;
+  top: 3rem;
+  background: rgba(0, 0, 0, 0.32);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgb(0, 255, 200);
+  border-radius: 5px;
+  width: 200px;
+}
+
+.address-list .item {
+  padding: 10px;
+  border-bottom: 1px solid rgb(0, 255, 200);
+}
+.address-list .item:hover {
+  transform: scale(0.95);
 }

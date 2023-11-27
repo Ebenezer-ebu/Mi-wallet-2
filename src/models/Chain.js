@@ -3,7 +3,7 @@ export const goerli_test = {
   name: 'Goerli',
   blockExplorerUrl: 'https://goerli.etherscan.io',
   rpcUrl: 'https://rpc.ankr.com/eth_goerli',
-  network: 'testnet'
+  network: 'testnet',
 };
 
 export const mainnet = {
@@ -19,6 +19,13 @@ export const polygon_mumbai = {
   name: 'Polygon Mumbai',
   blockExplorerUrl: 'https://mumbai.polygonscan.com/tx',
   rpcUrl: 'https://rpchttps://polygon-mumbai.g.alchemy.com/v2/z2wWtlYaKMjRPxsWZLwFpuoxEyZ0k6sz.ankr.com/polygon',
+  network: 'testnet',
+};
+
+export const sepolia_test = {
+  name: 'Sepolia',
+  blockExplorerUrl: 'https://sepolia.etherscan.io/',
+  rpcUrl: 'https://rpc.ankr.com/eth_sepolia',
   network: 'testnet',
 };
 

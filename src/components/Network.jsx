@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { goerli_test, polygon_mumbai, mainnet } from '../models/Chain';
+import { goerli_test, polygon_mumbai, mainnet, sepolia_test } from '../models/Chain';
 
 const Network = ({ show, setShowNetwork, setSelectedNetwork }) => {
   const [myNetworks, setMyNetworks] = useState(null);
   useEffect(() => {
-    const networks = [goerli_test, mainnet, polygon_mumbai];
+    const networks = [goerli_test, mainnet, polygon_mumbai, sepolia_test];
     setSelectedNetwork(networks[0]);
     setMyNetworks(networks);
   }, []);
